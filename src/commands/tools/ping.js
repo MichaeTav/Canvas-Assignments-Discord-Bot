@@ -8,11 +8,13 @@ module.exports = {
     const message = await interaction.deferReply({
       fetchReply: true,
     });
+    console.log("User: " + interaction.user.username + " pinged!");
     const newMessage = `API Latency: ${client.ws.ping}\nClient Ping: ${
       message.createdTimestamp - interaction.createdTimestamp
     }`;
     await interaction.editReply({
       content: newMessage,
+      ephemeral: true,
     });
   },
 };

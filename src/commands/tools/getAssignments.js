@@ -40,7 +40,7 @@ module.exports = {
           } @ ${time}`,
         });
       });
-      interaction.reply({ embeds: [embed] });
+      interaction.reply({ embeds: [embed], ephemeral: true });
     });
   },
 };
