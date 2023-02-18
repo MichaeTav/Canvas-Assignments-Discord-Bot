@@ -9,13 +9,14 @@ module.exports = {
   once: true,
   async execute(client) {
     console.log(`READY ${client.user.tag} is logged in and online`);
-    //Every monday at 8am
+    //Every Sunday at 8am "0 12 * * 0"
     const weeklyJob = new CronJob(
       "0 12 * * 0",
       async function () {
         const embed = await weekly.weeklyUpdate();
         const channel = client.channels.cache.find(
-          (channel) => channel.name === `${channelName}`
+          //(channel) => channel.name === `${channelName}`
+          (channel) => channel.name === `this-is-a-test`
         );
         channel.send({ embeds: [embed] });
       },

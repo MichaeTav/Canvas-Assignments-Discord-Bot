@@ -6,11 +6,9 @@ const { getDateDiffInDays, getTimeString } = require("../../tools/time");
 
 module.exports = {
   async weeklyUpdate() {
-    return getClasses(canvasToken).then((result) => {
-      const targetClass = result.data.allCourses.find(
-        (course) => course._id === `${courseId}`
-      );
-      const assignments = targetClass.assignmentsConnection.nodes;
+    try {
+      const course = await getClasses();
+      const assignments = course.data.course.assignmentsConnection.nodes;
 
       const futureAssignments = assignments
         .filter(
@@ -25,6 +23,7 @@ module.exports = {
               )
         )
         .sort((a, b) => new Date(a.dueAt) - new Date(b.dueAt));
+
       const embed = new EmbedBuilder()
         .setColor(0x0099ff)
         .setTitle("This Weeks Assignments");
@@ -43,7 +42,11 @@ module.exports = {
           } @ ${time}`,
         });
       });
+
       return embed;
-    });
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   },
 };

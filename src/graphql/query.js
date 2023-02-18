@@ -1,20 +1,21 @@
 const fetch = require("node-fetch");
+const { canvasToken, courseId } = process.env;
 
-const getClasses = (canvasToken) => {
+const getClasses = () => {
   const query = `
-query MyQuery {
-  allCourses {
-    _id
-    assignmentsConnection {
-      nodes {
-        dueAt
-        _id
-        name
-        htmlUrl
+  query getClass {
+    course(id: "${courseId}") {
+      name
+      assignmentsConnection {
+        nodes {
+          name
+          htmlUrl
+          dueAt
+        }
       }
     }
   }
-}
+  
 `;
 
   return fetch("https://csusm.instructure.com/api/graphql", {

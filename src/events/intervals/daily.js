@@ -6,11 +6,9 @@ const { getDateDiffInDays, getTimeString } = require("../../tools/time");
 
 module.exports = {
   async dailyUpdate() {
-    return getClasses(canvasToken).then((result) => {
-      const targetClass = result.data.allCourses.find(
-        (course) => course._id === `${courseId}`
-      );
-      const assignments = targetClass.assignmentsConnection.nodes;
+    try {
+      const course = await getClasses();
+      const assignments = course.data.course.assignmentsConnection.nodes;
 
       const futureAssignments = assignments
         .filter(
@@ -48,6 +46,9 @@ module.exports = {
         return embed;
       }
       return null;
-    });
+    } catch (exception) {
+      console.log(exception);
+      return null;
+    }
   },
 };

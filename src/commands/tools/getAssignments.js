@@ -9,11 +9,9 @@ module.exports = {
     .setName("get-assignments")
     .setDescription("Returns all upcoming assignments"),
   async execute(interaction, client) {
-    getClasses(canvasToken).then((result) => {
-      const targetClass = result.data.allCourses.find(
-        (course) => course._id === `${courseId}`
-      );
-      const assignments = targetClass.assignmentsConnection.nodes;
+    try {
+      const course = await getClasses();
+      const assignments = course.data.course.assignmentsConnection.nodes;
 
       const futureAssignments = assignments
         .filter(
@@ -40,7 +38,11 @@ module.exports = {
           } @ ${time}`,
         });
       });
+
       interaction.reply({ embeds: [embed], ephemeral: true });
-    });
+    } catch (exception) {
+      interaction.reply({ content: "There was an Error fetching the request" });
+      console.log(exception);
+    }
   },
 };
